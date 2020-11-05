@@ -4,6 +4,8 @@ import com.qingcha.rpc.core.utils.IdUtils;
 import com.qingcha.rpc.core.utils.UsefulUtils;
 
 /**
+ * RpcProtocol 构建者
+ *
  * @author qiqiang
  * @date 2020-11-05 9:52 上午
  */

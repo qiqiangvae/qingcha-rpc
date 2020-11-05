@@ -8,7 +8,7 @@ public class RpcResponseBody<T> {
     private boolean success;
     private T body;
     private String message;
-    private String exception;
+    private Throwable throwable;
 
     public boolean isSuccess() {
         return success;
@@ -34,11 +34,11 @@ public class RpcResponseBody<T> {
         this.body = body;
     }
 
-    public String getException() {
-        return exception;
+    public Throwable getThrowable() {
+        return throwable;
     }
 
-    public void setException(String exception) {
-        this.exception = exception;
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
     }
 }

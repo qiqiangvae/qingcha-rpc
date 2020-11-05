@@ -18,14 +18,18 @@ public abstract class AbstractProxyPool implements ProxyPool {
     abstract protected Map<String, RpcClientHolder> getRpcClientHolderMap();
 
 
+    /**
+     * 检查类是否符合
+     *
+     * @param clazz
+     * @return
+     */
     protected boolean checkClass(Class<?> clazz) {
         if (clazz == null) {
             return false;
         }
-        if (!clazz.isInterface()) {
-            return false;
-        }
-        return true;
+        // 只能是接口
+        return clazz.isInterface();
     }
 
     protected void deal(List<Class<?>> classList) {

@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * JDK 动态代理 InvocationHandler
+ *
  * @author qiqiang
  * @date 2020-11-04 9:44 上午
  */
@@ -39,25 +41,20 @@ public class ProxyInvocationHandler implements InvocationHandler {
         }
         Class<?> clazz = holder.getClazz();
         Channel channel = rpcClient.getChannel();
-        // 封装 protocol
-        RpcProtocol rpcProtocol = new RpcProtocol();
-        RpcProtocolHeader header = new RpcProtocolHeader();
-        String uuid = IdUtils.uuid();
-        header.setId(uuid);
-        header.setVersion(RpcVersion.V1_0.name());
-        header.setType(RequestType.INVOKE);
-        rpcProtocol.setHeader(header);
+        String id = IdUtils.uuid();
         InvokeRequestBody invokeRequestBody = new InvokeRequestBody();
         invokeRequestBody.setFullInvokeKey(clazz.getName() + "@" + methodName);
         invokeRequestBody.setArgs(args);
-        rpcProtocol.setBody(protocolSerialize.objToBytes(invokeRequestBody));
+        byte[] body = protocolSerialize.objToBytes(invokeRequestBody);
+        // 封装 protocol
+        RpcProtocol rpcProtocol = RpcProtocolBuilder.builder()
+                .id(id).type(RequestType.INVOKE).body(body).build();
         // 写入 protocol
-        channel.writeAndFlush(rpcProtocol);
-        return holder.get(uuid);
+        ProtocolSender.send(channel, rpcProtocol);
+        return holder.get(id);
     }
 
     public ProxyInvocationHandler(RpcClientHolder holder) {
         this.holder = holder;
-
     }
 }

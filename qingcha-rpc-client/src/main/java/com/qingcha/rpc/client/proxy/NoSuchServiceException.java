@@ -1,10 +1,12 @@
 package com.qingcha.rpc.client.proxy;
 
 /**
+ * 没有该服务异常
+ *
  * @author qiqiang
  * @date 2020-11-04 11:02 上午
  */
-public class NoSuchServiceException extends RuntimeException{
+public class NoSuchServiceException extends RuntimeException {
     public NoSuchServiceException() {
     }
 

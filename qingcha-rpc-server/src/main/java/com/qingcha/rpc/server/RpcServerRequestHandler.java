@@ -1,6 +1,6 @@
 package com.qingcha.rpc.server;
 
-import com.qingcha.rpc.core.InvokeMetaDataInfo;
+import com.qingcha.rpc.server.invoke.InvokeMetaDataInfo;
 import com.qingcha.rpc.core.common.InvokeRequestBody;
 import com.qingcha.rpc.core.protocol.*;
 import com.qingcha.rpc.core.utils.LoggerUtils;

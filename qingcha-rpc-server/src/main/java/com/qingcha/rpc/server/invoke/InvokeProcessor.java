@@ -1,6 +1,5 @@
 package com.qingcha.rpc.server.invoke;
 
-import com.qingcha.rpc.core.InvokeMetaDataInfo;
 import com.qingcha.rpc.core.common.RpcResponseBody;
 import com.qingcha.rpc.core.protocol.*;
 import io.netty.channel.Channel;
@@ -10,6 +9,8 @@ import java.lang.reflect.Method;
 
 
 /**
+ * 调用处理器
+ *
  * @author qiqiang
  * @date 2020-11-03 5:01 下午
  */
@@ -26,19 +27,28 @@ public class InvokeProcessor {
         rpcProtocolBuilder.id(key).type(RequestType.INVOKE_RESPONSE);
         RpcResponseBody rpcResponseBody = new RpcResponseBody();
         try {
+            // 通过反射调用
             Object invokeResult = method.invoke(invokeMetaDataInfo.getInstance(), args);
             // success
             rpcResponseBody.setSuccess(true);
             // response body
             rpcResponseBody.setBody(invokeResult);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
             // success
-            rpcResponseBody.setSuccess(true);
+            rpcResponseBody.setSuccess(false);
             // response message
-            rpcResponseBody.setMessage("调用失败！");
+            rpcResponseBody.setMessage(e.getMessage());
+            rpcResponseBody.setThrowable(e);
+        } catch (InvocationTargetException e) {
+            // success
+            rpcResponseBody.setSuccess(false);
+            // response message
+            Throwable targetException = e.getTargetException();
+            rpcResponseBody.setMessage(targetException.getMessage());
+            rpcResponseBody.setThrowable(targetException);
         } finally {
-            rpcProtocolBuilder.body(protocolSerialize.objToBytes(rpcResponseBody));
-            ProtocolSender.send(channel, rpcProtocolBuilder.build());
+            RpcProtocol protocol = rpcProtocolBuilder.body(protocolSerialize.objToBytes(rpcResponseBody)).build();
+            ProtocolSender.send(channel, protocol);
         }
     }
 }

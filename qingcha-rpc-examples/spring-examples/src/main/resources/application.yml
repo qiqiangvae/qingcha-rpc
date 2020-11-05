@@ -10,4 +10,4 @@ qingcha:
       service-annotation: org.springframework.stereotype.Service
 logging:
   level:
-    com.qingcha.rpc: debug
+    com.qingcha.rpc: info

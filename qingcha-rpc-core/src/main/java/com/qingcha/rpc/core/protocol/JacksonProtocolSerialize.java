@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
+ * jackson 序列化工具
+ *
  * @author qiqiang
  * @date 2020-11-05 2:16 下午
  */
@@ -17,7 +19,7 @@ public class JacksonProtocolSerialize implements ProtocolSerialize {
         try {
             return objectMapper.writeValueAsBytes(obj);
         } catch (JsonProcessingException e) {
-            throw new ProtocolSerializeException("jackson objToBytes 序列化异常");
+            throw new ProtocolSerializeException("jackson objToBytes 序列化异常！", e);
         }
     }
 
@@ -26,7 +28,7 @@ public class JacksonProtocolSerialize implements ProtocolSerialize {
         try {
             return objectMapper.readValue(source, clazz);
         } catch (IOException e) {
-            throw new ProtocolSerializeException("jackson bytesToObj 序列化异常");
+            throw new ProtocolSerializeException("jackson bytesToObj 反序列化异常！", e);
         }
     }
 }

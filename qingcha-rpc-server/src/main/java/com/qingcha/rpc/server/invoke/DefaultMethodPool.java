@@ -1,7 +1,5 @@
 package com.qingcha.rpc.server.invoke;
 
-import com.qingcha.rpc.core.DefaultInvokeMateInfoBuilder;
-import com.qingcha.rpc.core.InvokeMetaDataInfo;
 import com.qingcha.rpc.core.utils.ClassScanner;
 
 import java.util.List;

@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
+ * 处理返回结果的处理器
+ *
  * @author qiqiang
  * @date 2020-11-04 11:35 上午
  */
@@ -25,12 +27,16 @@ public class ProxyResponseProcessor {
         String message = rpcResponseBody.getMessage();
         Object bodyBody = rpcResponseBody.getBody();
         LoggerUtils.debug(logger, () -> logger.debug("success[{}],message[{}]", success, message));
-        ArrayBlockingQueue<Object> queue = holder.getQueue(key);
         try {
-            // 写入返回值
-            queue.put(bodyBody);
+            ArrayBlockingQueue<Object> queue = holder.getQueue(key);
+            if (success) {
+                // 写入返回值
+                queue.put(bodyBody);
+            } else {
+                holder.interrupt(key, rpcResponseBody.getThrowable());
+            }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            holder.interrupt(key, e);
         }
     }
 }

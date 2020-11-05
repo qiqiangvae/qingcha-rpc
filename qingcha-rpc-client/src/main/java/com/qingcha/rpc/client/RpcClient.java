@@ -32,15 +32,15 @@ public class RpcClient {
     /**
      * host 配置
      */
-    private String host;
+    private final String host;
     /**
      * port 配置
      */
-    private int port;
+    private final int port;
     /**
      * client name
      */
-    private String name;
+    private final String name;
     /**
      * 是否启动过
      */

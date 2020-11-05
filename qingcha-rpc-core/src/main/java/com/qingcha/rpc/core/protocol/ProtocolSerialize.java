@@ -1,6 +1,10 @@
 package com.qingcha.rpc.core.protocol;
 
 /**
+ * 序列化工具所需要实现的接口，它交由
+ * {@link ProtocolSerializeManager }管理
+ * 默认实现类有{@link FastJsonProtocolSerialize,JacksonProtocolSerialize}
+ *
  * @author qiqiang
  * @date 2020-11-03 5:48 下午
  */

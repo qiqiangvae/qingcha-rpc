@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 /**
+ * 协议编码器，将 协议转 byte
  * [包头标记] -> [头长度] -> [头内容] -> [body 长度] -> [body 内容]
  *
  * @author qiqiang

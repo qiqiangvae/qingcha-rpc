@@ -20,26 +20,31 @@ public class ProtocolSerializeManager {
         ProtocolSerializeManager.protocolSerialize = protocolSerialize;
     }
 
-    public static synchronized ProtocolSerialize getProtocolSerialize() {
-        // 从 SPI 中获取
+    public static ProtocolSerialize getProtocolSerialize() {
+        // 如果序列化工具不存在，那么初始化
         if (protocolSerialize == null) {
             init();
         }
         return protocolSerialize;
     }
 
-    private static void init() {
-        ServiceLoader<ProtocolSerialize> serviceLoader = ServiceLoader.load(ProtocolSerialize.class);
-        for (ProtocolSerialize serialize : serviceLoader) {
-            if (serialize != null) {
-                protocolSerialize = serialize;
-                break;
-            }
-        }
-        // 使用默认的序列化工具
+    /**
+     * 初始化的时候先从 SPI 中获取，如果从 SPI 获取不到，则使用默认的 {@link JacksonProtocolSerialize}
+     */
+    private static synchronized void init() {
         if (protocolSerialize == null) {
-            protocolSerialize = new JacksonProtocolSerialize();
+            ServiceLoader<ProtocolSerialize> serviceLoader = ServiceLoader.load(ProtocolSerialize.class);
+            for (ProtocolSerialize serialize : serviceLoader) {
+                if (serialize != null) {
+                    protocolSerialize = serialize;
+                    break;
+                }
+            }
+            // 使用默认的序列化工具
+            if (protocolSerialize == null) {
+                protocolSerialize = new JacksonProtocolSerialize();
+            }
+            LoggerUtils.info(logger, () -> logger.info("使用的 protocolSerialize 为[{}]", protocolSerialize.getClass().getName()));
         }
-        LoggerUtils.info(logger, () -> logger.info("使用的 protocolSerialize 为[{}]", protocolSerialize.getClass().getName()));
     }
 }

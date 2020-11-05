@@ -1,7 +1,5 @@
 package com.qingcha.rpc.server.invoke;
 
-import com.qingcha.rpc.core.InvokeMateInfoBuilder;
-import com.qingcha.rpc.core.InvokeMetaDataInfo;
 import com.qingcha.rpc.core.common.RpcInvoke;
 import com.qingcha.rpc.core.utils.UsefulUtils;
 
@@ -46,6 +44,10 @@ public abstract class AbstractMethodPool implements MethodPool {
             // 处理
             String invokeKey;
             for (Method method : waitToDeal) {
+                // 方法校验
+                if (!checkMethod(method)) {
+                    continue;
+                }
                 RpcInvoke methodRpcInvoke = method.getAnnotation(RpcInvoke.class);
                 if (methodRpcInvoke == null) {
                     invokeKey = method.getName();
@@ -69,6 +71,17 @@ public abstract class AbstractMethodPool implements MethodPool {
         }
     }
 
+    protected boolean checkMethod(Method method) {
+        if (method == null) {
+            return false;
+        }
+        // 非 public 方法忽略，抽象方法忽略，静态方法忽略
+        int modifiers = method.getModifiers();
+        return Modifier.isPublic(modifiers)
+                && !Modifier.isAbstract(modifiers)
+                && !Modifier.isStatic(modifiers);
+    }
+
     /**
      * 获取容器
      *
@@ -80,9 +93,7 @@ public abstract class AbstractMethodPool implements MethodPool {
         if (clazz == null) {
             return false;
         }
-        if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
-            return false;
-        }
-        return true;
+        // 接口忽略，抽象类忽略
+        return !(clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers()));
     }
 }

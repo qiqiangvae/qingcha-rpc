@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ServiceLoader;
 
 /**
+ * 代理池管理器
+ *
  * @author qiqiang
  * @date 2020-11-04 2:29 下午
  */
@@ -21,24 +23,26 @@ public class ProxyPoolManager {
     }
 
     public static ProxyPool getProxyPool() {
-        // 通过 SPI 机制获取 ProxyPoolFactory，从而获取代理池 proxyPool
         if (proxyPool == null) {
             init();
         }
         return proxyPool;
     }
 
-    private static void init() {
-        ServiceLoader<ProxyPoolFactory> factories = ServiceLoader.load(ProxyPoolFactory.class);
-        for (ProxyPoolFactory factory : factories) {
-            if (factory != null) {
-                proxyPool = factory.getProxyPool();
-            }
-        }
+    private static synchronized void init() {
         if (proxyPool == null) {
-            RpcClientConfiguration configuration = RpcClientConfiguration.configuration();
-            proxyPool = new DefaultProxyPoolFactory(configuration.getPackagePath()).getProxyPool();
+            // 通过 SPI 机制获取 ProxyPoolFactory，从而获取代理池 proxyPool
+            ServiceLoader<ProxyPoolFactory> factories = ServiceLoader.load(ProxyPoolFactory.class);
+            for (ProxyPoolFactory factory : factories) {
+                if (factory != null) {
+                    proxyPool = factory.getProxyPool();
+                }
+            }
+            if (proxyPool == null) {
+                RpcClientConfiguration configuration = RpcClientConfiguration.configuration();
+                proxyPool = new DefaultProxyPoolFactory(configuration.getPackagePath()).getProxyPool();
+            }
+            LoggerUtils.info(logger, () -> logger.info("使用的 proxyPool 为[{}]", proxyPool.getClass().getName()));
         }
-        LoggerUtils.info(logger, () -> logger.info("使用的 proxyPool 为[{}]", proxyPool.getClass().getName()));
     }
 }

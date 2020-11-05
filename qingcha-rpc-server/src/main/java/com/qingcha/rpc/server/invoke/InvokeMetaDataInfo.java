@@ -1,4 +1,4 @@
-package com.qingcha.rpc.core;
+package com.qingcha.rpc.server.invoke;
 
 import java.lang.reflect.Method;
 

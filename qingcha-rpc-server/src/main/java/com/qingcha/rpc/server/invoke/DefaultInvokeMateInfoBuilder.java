@@ -1,10 +1,11 @@
-package com.qingcha.rpc.core;
+package com.qingcha.rpc.server.invoke;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
+ * 默认
  * @author qiqiang
  * @date 2020-11-03 4:21 下午
  */

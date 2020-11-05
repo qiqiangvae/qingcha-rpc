@@ -14,7 +14,18 @@ import java.util.concurrent.TimeUnit;
 public class RpcClientHolder {
     private RpcClient rpcClient;
     private Class<?> clazz;
+    /**
+     * 保存调用结果的容器
+     */
     private final Map<String, ArrayBlockingQueue<Object>> responseMap = new ConcurrentHashMap<>();
+    /**
+     * 保存当前等待结果的线程的容器
+     */
+    private final Map<String, Thread> threadMap = new ConcurrentHashMap<>();
+    /**
+     * 保存出现调用异常的容器
+     */
+    private final Map<String, Throwable> throwableMap = new ConcurrentHashMap<>();
 
     public RpcClient getRpcClient() {
         return rpcClient;
@@ -35,11 +46,34 @@ public class RpcClientHolder {
     public Object get(String id) {
         ArrayBlockingQueue<Object> queue = getQueue(id);
         try {
+            // 将当前线程放到 threadMap 中
+            threadMap.put(id, Thread.currentThread());
             return queue.poll(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            // 封装并抛出异常
+            throw new RpcResponseException(throwableMap.get(id));
+        } finally {
+            // 帮助垃圾回收
+            responseMap.remove(id);
+            throwableMap.remove(id);
+            responseMap.remove(id);
         }
-        return null;
+    }
+
+    /**
+     * 抛出异常
+     *
+     * @param id        请求 key
+     * @param throwable 异常
+     */
+    protected void interrupt(String id, Throwable throwable) {
+        Thread thread = threadMap.get(id);
+        if (thread != null) {
+            // 保存，然后打断等待线程
+            throwableMap.put(id, throwable);
+            // 线程中断，从 com.qingcha.rpc.client.proxy.RpcClientHolder.get queue.poll(1, TimeUnit.MINUTES) 处被唤醒
+            thread.interrupt();
+        }
     }
 
     protected ArrayBlockingQueue<Object> getQueue(String id) {

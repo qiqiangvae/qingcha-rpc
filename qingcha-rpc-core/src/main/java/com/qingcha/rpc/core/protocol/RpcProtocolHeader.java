@@ -1,13 +1,24 @@
 package com.qingcha.rpc.core.protocol;
 
 /**
+ * RpcProtocol 头信息
+ *
  * @author qiqiang
  * @date 2020-11-03 12:37 下午
  */
 public class RpcProtocolHeader {
-    private String version;
-    private int type;
+    /**
+     * 请求id
+     */
     private String id;
+    /**
+     * 版本号
+     */
+    private String version;
+    /**
+     * 请求类型
+     */
+    private int type;
 
     public String getVersion() {
         return version;

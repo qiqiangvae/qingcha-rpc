@@ -1,10 +1,12 @@
 package com.qingcha.rpc.core.protocol;
 
 /**
+ * 协议序列化异常
+ *
  * @author qiqiang
  * @date 2020-11-05 2:22 下午
  */
-public class ProtocolSerializeException extends RuntimeException{
+public class ProtocolSerializeException extends RuntimeException {
     public ProtocolSerializeException() {
     }
 

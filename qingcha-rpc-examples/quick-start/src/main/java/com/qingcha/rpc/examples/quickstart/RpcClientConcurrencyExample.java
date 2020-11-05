@@ -21,10 +21,6 @@ public class RpcClientConcurrencyExample {
         RpcClientConfiguration.configuration().setPort(9900);
         RpcClientConfiguration.configuration().setPackagePath("com.qingcha.rpc.examples.quickstart.service");
         ProxyProcessor proxyProcessor = ProxyProcessor.instance();
-        HelloService helloService = proxyProcessor.getProxy(HelloService.class);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(helloService.hello("JonKee" + i));
-        }
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         BookService bookService = proxyProcessor.getProxy(BookService.class);
         for (int i = 0; i < 10; i++) {
@@ -37,6 +33,10 @@ public class RpcClientConcurrencyExample {
                     }
                 }
             });
+        }
+        HelloService helloService = proxyProcessor.getProxy(HelloService.class);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(helloService.hello("JonKee" + i));
         }
     }
 }

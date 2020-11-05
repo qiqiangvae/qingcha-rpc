@@ -21,27 +21,29 @@ public class MethodPoolManager {
         MethodPoolManager.methodPool = methodPool;
     }
 
-    public static synchronized MethodPool getMethodPool() {
+    public static MethodPool getMethodPool() {
         if (methodPool == null) {
             init();
         }
         return methodPool;
     }
 
-    private static void init() {
-        // 从 spi 中获取 methodPool
-        ServiceLoader<MethodPoolFactory> methodPoolFactories = ServiceLoader.load(MethodPoolFactory.class);
-        for (MethodPoolFactory factory : methodPoolFactories) {
-            if (factory != null) {
-                methodPool = factory.getMethodPool();
-                break;
-            }
-        }
-        // 如果获取不到，则用默认的
+    private static synchronized void init() {
         if (methodPool == null) {
-            RpcServerConfiguration configuration = RpcServerConfiguration.configuration();
-            methodPool = new DefaultMethodPoolFactory(configuration.getPackagePath()).getMethodPool();
+            // 从 spi 中获取 methodPool
+            ServiceLoader<MethodPoolFactory> methodPoolFactories = ServiceLoader.load(MethodPoolFactory.class);
+            for (MethodPoolFactory factory : methodPoolFactories) {
+                if (factory != null) {
+                    methodPool = factory.getMethodPool();
+                    break;
+                }
+            }
+            // 如果获取不到，则用默认的
+            if (methodPool == null) {
+                RpcServerConfiguration configuration = RpcServerConfiguration.configuration();
+                methodPool = new DefaultMethodPoolFactory(configuration.getPackagePath()).getMethodPool();
+            }
+            LoggerUtils.info(logger, () -> logger.info("使用的 methodPool 为[{}]", methodPool.getClass().getName()));
         }
-        LoggerUtils.info(logger, () -> logger.info("使用的 methodPool 为[{}]", methodPool.getClass().getName()));
     }
 }

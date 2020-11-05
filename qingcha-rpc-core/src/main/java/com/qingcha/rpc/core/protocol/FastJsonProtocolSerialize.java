@@ -4,17 +4,27 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 /**
+ * fastjson 序列化工具
+ *
  * @author qiqiang
  * @date 2020-11-03 5:51 下午
  */
 public class FastJsonProtocolSerialize implements ProtocolSerialize {
     @Override
     public byte[] objToBytes(Object obj) {
-        return JSON.toJSONBytes(obj, SerializerFeature.EMPTY);
+        try {
+            return JSON.toJSONBytes(obj, SerializerFeature.EMPTY);
+        } catch (Exception e) {
+            throw new ProtocolSerializeException("fastjson objToBytes 序列化异常！", e);
+        }
     }
 
     @Override
     public <T> T bytesToObj(byte[] source, Class<T> clazz) {
-        return JSON.parseObject(source, clazz);
+        try {
+            return JSON.parseObject(source, clazz);
+        } catch (Exception e) {
+            throw new ProtocolSerializeException("fastjson bytesToObj 反序列化异常！", e);
+        }
     }
 }

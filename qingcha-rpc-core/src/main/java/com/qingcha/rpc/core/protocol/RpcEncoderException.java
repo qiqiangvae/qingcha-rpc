@@ -1,10 +1,12 @@
 package com.qingcha.rpc.core.protocol;
 
 /**
+ * Rpc Encoder 异常
+ *
  * @author qiqiang
  * @date 2020-11-03 2:05 下午
  */
-public class RpcEncoderException extends RuntimeException{
+public class RpcEncoderException extends RuntimeException {
     public RpcEncoderException() {
     }
 

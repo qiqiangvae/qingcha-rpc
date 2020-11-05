@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 默认代理池
+ *
  * @author qiqiang
  * @date 2020-11-04 9:22 上午
  */

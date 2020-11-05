@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 public class HelloServiceImpl implements HelloService {
     @Override
     public String hello(String name) {
+        if (name.equals("JonKee9")) {
+            throw new RuntimeException("JonKee9 异常测试");
+        }
         return "hello qingcha";
     }
 }

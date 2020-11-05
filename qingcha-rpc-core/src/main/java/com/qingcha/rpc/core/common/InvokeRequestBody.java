@@ -3,6 +3,8 @@ package com.qingcha.rpc.core.common;
 import java.util.Arrays;
 
 /**
+ * 调用请求体
+ *
  * @author qiqiang
  * @date 2020-11-03 4:59 下午
  */
