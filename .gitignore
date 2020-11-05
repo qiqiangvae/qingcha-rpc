@@ -1,0 +1,7 @@
+# Project exclude paths
+/qingcha-rpc-client/target/
+/qingcha-rpc-core/target/
+/qingcha-rpc-examples/quick-start/target/
+/qingcha-rpc-examples/spring-examples/target/
+/qingcha-rpc-server/target/
+/qingcha-rpc-spring-boot-starter/target/

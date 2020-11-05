@@ -1,0 +1,11 @@
+qingcha:
+  rpc:
+    client:
+      package-path: com.qingcha.rpc.examples.spring.service
+      host: localhost
+      port: 9900
+    server:
+      port: 9900
+logging:
+  level:
+    com.qingcha.rpc: debug
