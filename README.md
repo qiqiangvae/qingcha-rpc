@@ -2,6 +2,8 @@
 
 本项目是一个基于 netty 的 rpc 框架，可以使用纯 java 编程或者跟 SpringBoot 集成。
 
+本项目纯属练手项目，未经测试和生产使用，谨慎使用！欢迎交流。
+
 # 使用介绍
 
 ## java 方式
@@ -205,9 +207,9 @@
 
 ### 协议序列化工具扩展
 
-实现`com.qingcha.rpc.core.protocol.ProtocolSerialize`接口。然后交由`ProtocolSerializeManager`管理，可以使用静态方法`setProtocolSerialize`设置或者使用 SPI机制，默认使用`FastJsonProtocolSerialize`,如果使用默认，需要添加 fastjson 依赖。
+实现`com.qingcha.rpc.core.protocol.ProtocolSerialize`接口。然后交由`ProtocolSerializeManager`管理，可以使用静态方法`setProtocolSerialize`设置或者使用 SPI 机制，默认使用`FastJsonProtocolSerialize`,如果使用默认，需要添加 fastjson 依赖。
 
-```
+```java
 public class ProtocolSerializeManager {
     private static ProtocolSerialize protocolSerialize;
 
