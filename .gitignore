@@ -5,3 +5,5 @@
 /qingcha-rpc-examples/spring-examples/target/
 /qingcha-rpc-server/target/
 /qingcha-rpc-spring-boot-starter/target/
+.idea/
+*.iml

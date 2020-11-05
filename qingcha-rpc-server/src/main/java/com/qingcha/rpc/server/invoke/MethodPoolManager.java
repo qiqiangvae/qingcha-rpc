@@ -1,7 +1,5 @@
 package com.qingcha.rpc.server.invoke;
 
-import com.qingcha.rpc.core.protocol.FastJsonProtocolSerialize;
-import com.qingcha.rpc.core.protocol.ProtocolSerialize;
 import com.qingcha.rpc.server.RpcServerConfiguration;
 
 import java.util.ServiceLoader;

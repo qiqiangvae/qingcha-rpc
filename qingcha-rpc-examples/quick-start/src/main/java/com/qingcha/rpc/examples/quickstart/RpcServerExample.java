@@ -9,6 +9,7 @@ import com.qingcha.rpc.server.RpcServerConfiguration;
  */
 public class RpcServerExample {
     public static void main(String[] args) {
+        // 配置需要扫描的服务实现类所在包
         RpcServerConfiguration.configuration().setPackagePath("com.qingcha.rpc.examples.quickstart.service");
         RpcServer rpcServer = new RpcServer(9900);
         rpcServer.start();

@@ -6,6 +6,7 @@ import com.qingcha.rpc.core.utils.ClassScanner;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class SpringProxyPool extends AbstractProxyPool {
 
     @Override
     public void refresh() {
-        if (null == packagePath || packagePath.isEmpty()) {
+        if (StringUtils.isEmpty(packagePath)) {
             return;
         }
         List<Class<?>> classList = ClassScanner.scan(packagePath);

@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * @author qiqiang
  * @date 2020-11-03 12:34 下午
  */
-public class RpcClientExample2 {
+public class RpcClientConcurrencyExample {
     public static void main(String[] args) {
         RpcClientConfiguration.configuration().setHost("localhost");
         RpcClientConfiguration.configuration().setPort(9900);

@@ -46,7 +46,7 @@ public class RpcServerRequestHandler extends SimpleChannelInboundHandler<RpcProt
                 ProtocolSender.send(ctx.channel(), ping);
                 break;
             case RequestType.PONG:
-                LoggerUtils.info(logger, () -> logger.info("收到服务端的 PONG 消息"));
+                LoggerUtils.info(logger, () -> logger.info("收到客户端[{}]的 PONG 消息", ctx.channel().remoteAddress()));
                 break;
             case RequestType.INVOKE:
                 InvokeRequestBody invokeRequestBody = protocolSerialize.bytesToObj(body, InvokeRequestBody.class);

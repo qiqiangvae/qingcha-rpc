@@ -21,6 +21,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.util.StringUtils;
 
 /**
  * @author qiqiang
@@ -52,8 +53,11 @@ public class SpringRpcProxyPoolFactory implements ProxyPoolFactory, BeanDefiniti
     @Override
     public void setEnvironment(Environment environment) {
         packagePath = environment.getProperty("qingcha.rpc.client.package-path");
-        String host = environment.getProperty("qingcha.rpc.client.host");
+        String host = environment.getProperty("qingcha.rpc.client.host", "localhost");
         String port = environment.getProperty("qingcha.rpc.client.port");
+        if (StringUtils.isEmpty(port)) {
+            throw new SpringRpcClientConfigurationException("配置[qingcha.rpc.client.port]不能为空！");
+        }
         RpcClientConfiguration.configuration().setHost(host);
         RpcClientConfiguration.configuration().setPort(Integer.parseInt(port));
     }

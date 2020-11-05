@@ -5,7 +5,7 @@ package com.qingcha.rpc.server.invoke;
  * @date 2020-11-03 3:11 下午
  */
 public class DefaultMethodPoolFactory implements MethodPoolFactory {
-    private String packagePath;
+    private final String packagePath;
 
     public DefaultMethodPoolFactory(String packagePath) {
         this.packagePath = packagePath;

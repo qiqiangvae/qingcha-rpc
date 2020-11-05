@@ -3,6 +3,7 @@ package com.qingcha.rpc.examples.quickstart.service;
 import com.qingcha.rpc.core.common.RpcInvoke;
 
 /**
+ *
  * @author qiqiang
  * @date 2020-11-03 3:33 下午
  */
