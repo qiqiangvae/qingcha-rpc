@@ -52,7 +52,11 @@ public class RpcServerRequestHandler extends SimpleChannelInboundHandler<RpcProt
                 InvokeRequestBody invokeRequestBody = protocolSerialize.bytesToObj(body, InvokeRequestBody.class);
                 LoggerUtils.debug(logger, () -> logger.debug("协议请求体：[{}]", invokeRequestBody));
                 InvokeMetaDataInfo invokeMetaDataInfo = methodPool.get(invokeRequestBody.getFullInvokeKey());
-                invokeProcessor.invoke(header.getId(), ctx.channel(), invokeMetaDataInfo, invokeRequestBody.getArgs());
+                if (invokeMetaDataInfo != null) {
+                    invokeProcessor.invoke(header.getId(), ctx.channel(), invokeMetaDataInfo, invokeRequestBody.getArgs());
+                } else {
+                    LoggerUtils.warn(logger, () -> logger.warn("[{}]不存在！", invokeRequestBody.getFullInvokeKey()));
+                }
                 break;
             default:
                 break;
