@@ -1,6 +1,7 @@
 package com.qingcha.rpc.client.proxy;
 
 import com.qingcha.rpc.core.utils.ClassScanner;
+import com.qingcha.rpc.core.utils.UsefulUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class DefaultProxyPool extends AbstractProxyPool {
 
     @Override
     public void refresh() {
-        if (null == packagePath || packagePath.isEmpty()) {
+        if (UsefulUtils.isBlack(packagePath)) {
             return;
         }
         List<Class<?>> classList = ClassScanner.scan(packagePath);

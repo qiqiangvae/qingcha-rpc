@@ -4,6 +4,7 @@ import com.qingcha.rpc.client.RpcClientConfiguration;
 import com.qingcha.rpc.client.proxy.ProxyPool;
 import com.qingcha.rpc.client.proxy.ProxyPoolFactory;
 import com.qingcha.rpc.client.proxy.ProxyPoolManager;
+import com.qingcha.rpc.core.utils.UsefulUtils;
 import com.qingcha.rpc.server.invoke.MethodPoolManager;
 import com.qingcha.rpc.springboot.server.SpringMethodPool;
 import org.springframework.beans.BeansException;
@@ -55,7 +56,7 @@ public class SpringRpcProxyPoolFactory implements ProxyPoolFactory, BeanDefiniti
         packagePath = environment.getProperty("qingcha.rpc.client.package-path");
         String host = environment.getProperty("qingcha.rpc.client.host", "localhost");
         String port = environment.getProperty("qingcha.rpc.client.port");
-        if (StringUtils.isEmpty(port)) {
+        if (UsefulUtils.isBlack(port)) {
             throw new SpringRpcClientConfigurationException("配置[qingcha.rpc.client.port]不能为空！");
         }
         RpcClientConfiguration.configuration().setHost(host);

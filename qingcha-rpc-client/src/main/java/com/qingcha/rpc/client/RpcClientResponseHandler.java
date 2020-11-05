@@ -3,7 +3,6 @@ package com.qingcha.rpc.client;
 import com.qingcha.rpc.client.proxy.ProxyResponseProcessor;
 import com.qingcha.rpc.core.common.RpcResponseBody;
 import com.qingcha.rpc.core.protocol.*;
-import com.qingcha.rpc.core.utils.IdUtils;
 import com.qingcha.rpc.core.utils.LoggerUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +27,7 @@ public class RpcClientResponseHandler extends SimpleChannelInboundHandler<RpcPro
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcProtocol msg) throws Exception {
         RpcProtocolHeader header = msg.getHeader();
-        LoggerUtils.debug(logger, () -> logger.debug("协议版本[{}],请求类型[{}]", header.getVersion(), header.getType()));
+        LoggerUtils.debug(logger, () -> logger.debug("协议版本[{}]，请求类型[{}]，请求Id[{}]", header.getVersion(), header.getType(), header.getId()));
         byte[] body = msg.getBody();
         switch (header.getType()) {
             case RequestType.PING:

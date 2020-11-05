@@ -145,7 +145,9 @@
    ```yaml
    qingcha:
      rpc:
-        port: 9900
+       port: 9900
+       # 可换成自定义注解
+       service-annotation: org.springframework.stereotype.Service
    ```
 
    
@@ -207,7 +209,7 @@
 
 ### 协议序列化工具扩展
 
-实现`com.qingcha.rpc.core.protocol.ProtocolSerialize`接口。然后交由`ProtocolSerializeManager`管理，可以使用静态方法`setProtocolSerialize`设置或者使用 SPI 机制，默认使用`FastJsonProtocolSerialize`,如果使用默认，需要添加 fastjson 依赖。
+实现`com.qingcha.rpc.core.protocol.ProtocolSerialize`接口。然后交由`ProtocolSerializeManager`管理，可以使用静态方法`setProtocolSerialize`设置或者使用 SPI 机制，默认使用`JacksonProtocolSerialize`。
 
 ```java
 public class ProtocolSerializeManager {
@@ -230,7 +232,7 @@ public class ProtocolSerializeManager {
         }
         // 使用默认的序列化工具
         if (protocolSerialize == null) {
-            protocolSerialize = new FastJsonProtocolSerialize();
+            protocolSerialize = new JacksonProtocolSerialize();
         }
         return protocolSerialize;
     }

@@ -6,6 +6,8 @@ qingcha:
       port: 9900
     server:
       port: 9900
+      # 可换成自定义注解
+      service-annotation: org.springframework.stereotype.Service
 logging:
   level:
     com.qingcha.rpc: debug

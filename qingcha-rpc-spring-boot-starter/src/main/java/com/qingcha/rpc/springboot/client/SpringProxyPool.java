@@ -3,6 +3,7 @@ package com.qingcha.rpc.springboot.client;
 import com.qingcha.rpc.client.proxy.AbstractProxyPool;
 import com.qingcha.rpc.client.proxy.RpcClientHolder;
 import com.qingcha.rpc.core.utils.ClassScanner;
+import com.qingcha.rpc.core.utils.UsefulUtils;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -37,7 +38,7 @@ public class SpringProxyPool extends AbstractProxyPool {
 
     @Override
     public void refresh() {
-        if (StringUtils.isEmpty(packagePath)) {
+        if (UsefulUtils.isBlack(packagePath)) {
             return;
         }
         List<Class<?>> classList = ClassScanner.scan(packagePath);

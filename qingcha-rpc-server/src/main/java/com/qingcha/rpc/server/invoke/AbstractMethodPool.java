@@ -3,6 +3,7 @@ package com.qingcha.rpc.server.invoke;
 import com.qingcha.rpc.core.InvokeMateInfoBuilder;
 import com.qingcha.rpc.core.InvokeMetaDataInfo;
 import com.qingcha.rpc.core.common.RpcInvoke;
+import com.qingcha.rpc.core.utils.UsefulUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -42,12 +43,6 @@ public abstract class AbstractMethodPool implements MethodPool {
                 // 如果在类上有 RpcInvoke 注解，则说明所有方法都可能会被暴露
                 Collections.addAll(waitToDeal, methods);
             }
-            Map<Method, Class<?>> parentMethodMap = new HashMap<>(clazz.getInterfaces().length);
-            for (Class<?> parentClass : clazz.getInterfaces()) {
-                for (Method method : parentClass.getMethods()) {
-                    parentMethodMap.put(method, parentClass);
-                }
-            }
             // 处理
             String invokeKey;
             for (Method method : waitToDeal) {
@@ -57,7 +52,7 @@ public abstract class AbstractMethodPool implements MethodPool {
                 } else {
                     invokeKey = methodRpcInvoke.invokeKey();
                 }
-                if (invokeKey.isEmpty()) {
+                if (UsefulUtils.isBlack(invokeKey)) {
                     invokeKey = method.getName();
                 }
                 for (Class<?> parentClass : clazz.getInterfaces()) {

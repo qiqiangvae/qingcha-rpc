@@ -1,6 +1,6 @@
 package com.qingcha.rpc.core.common;
 
-import com.alibaba.fastjson.JSON;
+import java.util.Arrays;
 
 /**
  * @author qiqiang
@@ -28,6 +28,9 @@ public class InvokeRequestBody {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return "{" +
+                "fullInvokeKey='" + fullInvokeKey + '\'' +
+                ", args=" + Arrays.toString(args) +
+                '}';
     }
 }

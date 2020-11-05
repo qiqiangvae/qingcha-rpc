@@ -35,7 +35,7 @@ public class RpcServerRequestHandler extends SimpleChannelInboundHandler<RpcProt
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcProtocol msg) throws Exception {
         RpcProtocolHeader header = msg.getHeader();
-        LoggerUtils.debug(logger, () -> logger.debug("协议版本[{}],请求类型[{}]", header.getVersion(), header.getType()));
+        LoggerUtils.debug(logger, () -> logger.debug("协议版本[{}]，请求类型[{}]，请求Id[{}]", header.getVersion(), header.getType(), header.getId()));
         byte[] body = msg.getBody();
         switch (header.getType()) {
             case RequestType.PING:

@@ -8,6 +8,7 @@ public class RpcResponseBody<T> {
     private boolean success;
     private T body;
     private String message;
+    private String exception;
 
     public boolean isSuccess() {
         return success;
@@ -16,6 +17,7 @@ public class RpcResponseBody<T> {
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
     public String getMessage() {
         return message;
     }
@@ -30,5 +32,13 @@ public class RpcResponseBody<T> {
 
     public void setBody(T body) {
         this.body = body;
+    }
+
+    public String getException() {
+        return exception;
+    }
+
+    public void setException(String exception) {
+        this.exception = exception;
     }
 }

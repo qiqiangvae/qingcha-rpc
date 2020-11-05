@@ -1,6 +1,7 @@
 package com.qingcha.rpc.core.protocol;
 
 import com.qingcha.rpc.core.utils.IdUtils;
+import com.qingcha.rpc.core.utils.UsefulUtils;
 
 /**
  * @author qiqiang
@@ -42,11 +43,11 @@ public class RpcProtocolBuilder {
     public RpcProtocol build() {
         RpcProtocol rpcProtocol = new RpcProtocol();
         RpcProtocolHeader header = new RpcProtocolHeader();
-        if (id == null || id.isEmpty()) {
+        if (UsefulUtils.isBlack(id)) {
             id = IdUtils.uuid();
         }
         header.setId(id);
-        if (version == null || version.isEmpty()) {
+        if (UsefulUtils.isBlack(version)) {
             version = CurrentRpcVersion.VERSION.name();
         }
         header.setVersion(version);
