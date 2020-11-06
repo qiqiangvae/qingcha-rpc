@@ -23,6 +23,7 @@ public class RpcClientConcurrencyExample {
         ProxyProcessor proxyProcessor = ProxyProcessor.instance();
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         BookService bookService = proxyProcessor.getProxy(BookService.class);
+        System.out.println(bookService.hashCode());
         for (int i = 0; i < 10; i++) {
             executorService.execute(new Runnable() {
                 @Override

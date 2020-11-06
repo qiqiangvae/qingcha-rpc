@@ -8,14 +8,8 @@ import io.netty.channel.Channel;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * JDK 动态代理 InvocationHandler
@@ -26,15 +20,28 @@ import java.util.stream.Stream;
 public class ProxyInvocationHandler implements InvocationHandler {
     private final RpcClientHolder holder;
     private final ProtocolSerialize protocolSerialize = ProtocolSerializeManager.getProtocolSerialize();
-    private static final List<String> ignoreMethod = Stream.of(Object.class.getMethods()).map(Method::getName).collect(Collectors.toList());
+    private final static String TO_STRING = "toString";
+    private final static String EQUALS = "equals";
+    private final static String HASH_CODE = "hashCode";
+
+    public ProxyInvocationHandler(RpcClientHolder holder) {
+        this.holder = holder;
+    }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        String methodName = method.getName();
-        if (ignoreMethod.contains(methodName)) {
-            return method.invoke(proxy, args);
-        }
         RpcClient rpcClient = holder.getRpcClient();
+        String methodName = method.getName();
+        // 因为代理的是一个接口，没有具体的实现类，所以有一些方法无法处理
+        if (TO_STRING.equals(methodName)) {
+            return holder.getClazz().getName() + "@Proxy";
+        }
+        if (EQUALS.equals(methodName)) {
+            return this.equals(args[0]);
+        }
+        if (HASH_CODE.equals(methodName)) {
+            return this.hashCode();
+        }
         // 懒加载模式，如果没有启动，则现在开始启动
         if (!rpcClient.isStarted()) {
             rpcClient.start();
@@ -54,7 +61,4 @@ public class ProxyInvocationHandler implements InvocationHandler {
         return holder.get(id);
     }
 
-    public ProxyInvocationHandler(RpcClientHolder holder) {
-        this.holder = holder;
-    }
 }

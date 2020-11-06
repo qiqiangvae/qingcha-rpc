@@ -7,6 +7,9 @@ package com.qingcha.rpc.core.protocol;
  * @date 2020-11-03 11:49 上午
  */
 public class RpcProtocol {
+    /**
+     * 协议开始标记
+     */
     private final int start = ConstantValue.HEAD_START;
     /**
      * header 长度
