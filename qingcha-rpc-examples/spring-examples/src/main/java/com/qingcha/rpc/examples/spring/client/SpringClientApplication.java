@@ -7,14 +7,10 @@ import com.qingcha.rpc.examples.spring.service.BookService;
 import com.qingcha.rpc.examples.spring.service.HelloService;
 import com.qingcha.rpc.springboot.client.EnableRpcClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -40,10 +36,10 @@ public class SpringClientApplication {
     public void onStart(ApplicationReadyEvent applicationReadyEvent) {
         ObjectMapper objectMapper = new ObjectMapper();
         ExecutorService executorService = Executors.newFixedThreadPool(4);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 50; i++) {
             executorService.execute(() -> {
                 try {
-                    for (int j = 0; j < 10; j++) {
+                    for (int j = 0; j < 100; j++) {
                         List<Book> books = bookService.findByAuthor("金庸");
                         System.out.println(objectMapper.writeValueAsString(books));
                     }

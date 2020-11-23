@@ -5,7 +5,7 @@ package com.qingcha.rpc.server;
  * @date 2020-11-03 10:57 上午
  */
 public class ServerShutdownHookThread extends Thread {
-    private RpcServerExecutor rpcServerExecutor;
+    private final RpcServerExecutor rpcServerExecutor;
 
     public ServerShutdownHookThread(RpcServerExecutor rpcServerExecutor) {
         this.rpcServerExecutor = rpcServerExecutor;

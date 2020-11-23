@@ -21,7 +21,7 @@ public class SpringProxyPool extends AbstractProxyPool {
 
     private Map<String, RpcClientHolder> proxyInfoMap;
     private String packagePath;
-    private BeanDefinitionRegistry registry;
+    private final BeanDefinitionRegistry registry;
 
     public SpringProxyPool(BeanDefinitionRegistry registry) {
         this.registry = registry;

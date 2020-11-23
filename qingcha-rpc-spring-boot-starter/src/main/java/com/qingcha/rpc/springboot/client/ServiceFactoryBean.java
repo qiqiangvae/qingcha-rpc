@@ -4,6 +4,7 @@ import com.qingcha.rpc.client.proxy.ProxyProcessor;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
+ * 客户端代理服务 factory bean
  * @author qiqiang
  * @date 2020-11-04 4:04 下午
  */
@@ -18,10 +19,6 @@ public class ServiceFactoryBean<T> implements FactoryBean<T> {
 
     @Override
     public Class<?> getObjectType() {
-        return clazz;
-    }
-
-    public Class<T> getClazz() {
         return clazz;
     }
 

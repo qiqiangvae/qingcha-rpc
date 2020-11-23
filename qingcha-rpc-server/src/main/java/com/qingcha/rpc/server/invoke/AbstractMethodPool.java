@@ -61,11 +61,10 @@ public abstract class AbstractMethodPool implements MethodPool {
                     // 找到该方法继承或者实现的父类
                     try {
                         parentClass.getMethod(method.getName(), method.getParameterTypes());
-                    } catch (NoSuchMethodException e) {
-                        continue;
+                        String fullInvokeKey = parentClass.getName() + "@" + invokeKey;
+                        getInvokeMetaDataInfoMap().put(fullInvokeKey, invokeMateInfoBuilder.build(invokeKey, method, clazz, parentClass));
+                    } catch (NoSuchMethodException ignored) {
                     }
-                    String fullInvokeKey = parentClass.getName() + "@" + invokeKey;
-                    getInvokeMetaDataInfoMap().put(fullInvokeKey, invokeMateInfoBuilder.build(invokeKey, method, clazz, parentClass));
                 }
             }
         }

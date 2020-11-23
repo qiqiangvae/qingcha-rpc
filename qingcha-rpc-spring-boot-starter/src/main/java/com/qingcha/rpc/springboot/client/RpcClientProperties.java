@@ -3,6 +3,8 @@ package com.qingcha.rpc.springboot.client;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
+ * 参数配置
+ *
  * @author qiqiang
  * @date 2020-11-04 5:04 下午
  */

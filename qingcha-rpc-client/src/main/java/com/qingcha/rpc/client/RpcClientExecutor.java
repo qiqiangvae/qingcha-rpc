@@ -12,7 +12,7 @@ import java.util.concurrent.*;
  * @date 2020-11-03 10:49 上午
  */
 public class RpcClientExecutor {
-    private ExecutorService serverExecutor;
+    private final ExecutorService serverExecutor;
     private List<EventExecutorGroup> nettyExecutorGroups;
 
     private RpcClientExecutor() {

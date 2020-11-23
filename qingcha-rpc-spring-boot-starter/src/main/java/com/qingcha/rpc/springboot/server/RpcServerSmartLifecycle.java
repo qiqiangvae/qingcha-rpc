@@ -29,7 +29,7 @@ public class RpcServerSmartLifecycle implements SmartLifecycle {
 
     @Override
     public boolean isRunning() {
-        return false;
+        return isRunning;
     }
 
     @Override

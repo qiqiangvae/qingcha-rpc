@@ -8,6 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 启用 Rpc Server 注解类
+ *
  * @author qiqiang
  * @date 2020-11-04 5:41 下午
  */

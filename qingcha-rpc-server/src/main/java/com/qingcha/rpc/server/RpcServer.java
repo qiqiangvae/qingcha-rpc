@@ -22,7 +22,7 @@ public class RpcServer {
 
     private final Logger logger = LoggerFactory.getLogger(RpcServer.class);
     private RpcServerExecutor rpcServerExecutor;
-    private int port;
+    private final int port;
 
     public RpcServer(int port) {
         this.port = port;

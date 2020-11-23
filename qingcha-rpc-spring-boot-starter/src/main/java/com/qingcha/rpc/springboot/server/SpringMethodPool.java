@@ -12,6 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
+ * Spring 方法池，默认扫描被 {@link org.springframework.stereotype.Service} 标记的类，可自定义
+ *
  * @author qiqiang
  * @date 2020-11-04 3:06 下午
  */
