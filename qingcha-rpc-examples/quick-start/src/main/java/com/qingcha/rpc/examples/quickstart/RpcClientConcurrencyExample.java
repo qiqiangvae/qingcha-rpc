@@ -2,6 +2,7 @@ package com.qingcha.rpc.examples.quickstart;
 
 import com.alibaba.fastjson.JSON;
 import com.qingcha.rpc.client.RpcClientConfiguration;
+import com.qingcha.rpc.client.interceptor.ClientRpcInterceptorManager;
 import com.qingcha.rpc.client.proxy.ProxyProcessor;
 import com.qingcha.rpc.examples.quickstart.service.Book;
 import com.qingcha.rpc.examples.quickstart.service.BookService;
@@ -21,17 +22,15 @@ public class RpcClientConcurrencyExample {
         RpcClientConfiguration.configuration().setPort(9900);
         RpcClientConfiguration.configuration().setPackagePath("com.qingcha.rpc.examples.quickstart.service");
         ProxyProcessor proxyProcessor = ProxyProcessor.instance();
+        ClientRpcInterceptorManager.addLastInterceptor(MyClientRpcInterceptor1.class);
+        ClientRpcInterceptorManager.addLastInterceptor(MyClientRpcInterceptor2.class);
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         BookService bookService = proxyProcessor.getProxy(BookService.class);
-        System.out.println(bookService.hashCode());
         for (int i = 0; i < 10; i++) {
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    for (int j = 0; j < 10; j++) {
-                        List<Book> books = bookService.findByAuthor("金庸");
-                        System.out.println(JSON.toJSONString(books));
-                    }
+            executorService.execute(() -> {
+                for (int j = 0; j < 10; j++) {
+                    List<Book> books = bookService.findByAuthor("金庸");
+                    System.out.println(JSON.toJSONString(books));
                 }
             });
         }

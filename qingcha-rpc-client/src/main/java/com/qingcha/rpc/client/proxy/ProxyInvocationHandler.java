@@ -1,15 +1,21 @@
 package com.qingcha.rpc.client.proxy;
 
 import com.qingcha.rpc.client.RpcClient;
+import com.qingcha.rpc.client.interceptor.ClientInterceptor;
+import com.qingcha.rpc.client.interceptor.ClientRpcInterceptorManager;
+import com.qingcha.rpc.client.interceptor.ProxySendProtocolInterceptor;
 import com.qingcha.rpc.core.common.InvokeRequestBody;
+import com.qingcha.rpc.core.interceptor.RpcInterceptor;
+import com.qingcha.rpc.core.interceptor.RpcInterceptorChain;
+import com.qingcha.rpc.core.interceptor.RpcInterceptorException;
 import com.qingcha.rpc.core.protocol.*;
 import com.qingcha.rpc.core.utils.IdUtils;
-import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * JDK 动态代理 InvocationHandler
@@ -18,14 +24,25 @@ import java.util.List;
  * @date 2020-11-04 9:44 上午
  */
 public class ProxyInvocationHandler implements InvocationHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ProxyInvocationHandler.class);
     private final RpcClientHolder holder;
     private final ProtocolSerialize protocolSerialize = ProtocolSerializeManager.getProtocolSerialize();
     private final static String TO_STRING = "toString";
     private final static String EQUALS = "equals";
     private final static String HASH_CODE = "hashCode";
+    private final RpcInterceptorChain<RpcProtocol> rpcInterceptorChain;
 
     public ProxyInvocationHandler(RpcClientHolder holder) {
         this.holder = holder;
+        rpcInterceptorChain = new RpcInterceptorChain<>();
+        try {
+            for (Class<? extends ClientInterceptor> interceptorClass : ClientRpcInterceptorManager.getInterceptorClasses()) {
+                rpcInterceptorChain.addLastInterceptor(ClientRpcInterceptorManager.getInterceptor(interceptorClass));
+            }
+            rpcInterceptorChain.addLastInterceptor(new ProxySendProtocolInterceptor(this.holder));
+        } catch (Exception e) {
+            throw new RpcInterceptorException("拦截器创建失败", e);
+        }
     }
 
     @Override
@@ -47,7 +64,6 @@ public class ProxyInvocationHandler implements InvocationHandler {
             rpcClient.start();
         }
         Class<?> clazz = holder.getClazz();
-        Channel channel = rpcClient.getChannel();
         String id = IdUtils.uuid();
         InvokeRequestBody invokeRequestBody = new InvokeRequestBody();
         invokeRequestBody.setFullInvokeKey(clazz.getName() + "@" + methodName);
@@ -57,8 +73,11 @@ public class ProxyInvocationHandler implements InvocationHandler {
         RpcProtocol rpcProtocol = RpcProtocolBuilder.builder()
                 .id(id).type(RequestType.INVOKE).body(body).build();
         // 写入 protocol
-        ProtocolSender.send(channel, rpcProtocol);
-        return holder.get(id);
+        try {
+            return rpcInterceptorChain.invoke(id, rpcProtocol);
+        } finally {
+            rpcInterceptorChain.clear();
+        }
     }
 
 }

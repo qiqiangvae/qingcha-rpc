@@ -50,6 +50,10 @@ public class RpcServerExecutor {
         serverExecutor.execute(r);
     }
 
+    public <V> Future<V> call(Callable<V> tssk) {
+        return serverExecutor.submit(tssk);
+    }
+
     public void addNettyExecutorGroup(EventExecutorGroup group) {
         if (nettyExecutorGroups == null) {
             nettyExecutorGroups = new ArrayList<>(2);
