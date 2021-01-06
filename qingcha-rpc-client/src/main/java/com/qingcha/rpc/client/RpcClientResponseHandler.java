@@ -39,7 +39,7 @@ public class RpcClientResponseHandler extends SimpleChannelInboundHandler<RpcPro
                 LoggerUtils.info(logger, () -> logger.info("收到服务端的 PONG 消息"));
                 break;
             case RequestType.INVOKE_RESPONSE:
-                RpcResponseBody rpcResponseBody = protocolSerialize.bytesToObj(body, RpcResponseBody.class);
+                RpcResponseBody<?> rpcResponseBody = protocolSerialize.bytesToObj(body, RpcResponseBody.class);
                 proxyResponseProcessor.handleResponse(header.getId(), rpcResponseBody);
                 break;
             default:

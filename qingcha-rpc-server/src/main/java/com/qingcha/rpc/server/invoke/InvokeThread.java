@@ -1,6 +1,7 @@
 package com.qingcha.rpc.server.invoke;
 
 import com.qingcha.rpc.core.common.RpcResponseBody;
+import com.qingcha.rpc.core.exception.RpcInvocationException;
 import com.qingcha.rpc.core.interceptor.RpcInterceptorChain;
 import com.qingcha.rpc.core.interceptor.RpcInterceptorException;
 import com.qingcha.rpc.core.protocol.*;
@@ -43,7 +44,7 @@ public class InvokeThread extends Thread {
     public void run() {
         RpcProtocolBuilder rpcProtocolBuilder = RpcProtocolBuilder.builder();
         rpcProtocolBuilder.id(invokeRequest.getKey()).type(RequestType.INVOKE_RESPONSE);
-        RpcResponseBody rpcResponseBody = new RpcResponseBody();
+        RpcResponseBody<Object> rpcResponseBody = new RpcResponseBody<>();
         try {
             // 通过反射调用
             Object invokeResult = rpcInterceptorChain.invoke(invokeRequest.getKey(), invokeRequest);
@@ -57,10 +58,10 @@ public class InvokeThread extends Thread {
             if (throwable instanceof InvocationTargetException) {
                 InvocationTargetException targetException = (InvocationTargetException) throwable;
                 rpcResponseBody.setMessage(targetException.getMessage());
-                rpcResponseBody.setThrowable(targetException);
+                rpcResponseBody.setThrowable(targetException.getTargetException());
             } else {
                 rpcResponseBody.setMessage(throwable.getMessage());
-                rpcResponseBody.setThrowable(throwable);
+                rpcResponseBody.setThrowable(throwable.getCause());
             }
         } finally {
             rpcInterceptorChain.clear();

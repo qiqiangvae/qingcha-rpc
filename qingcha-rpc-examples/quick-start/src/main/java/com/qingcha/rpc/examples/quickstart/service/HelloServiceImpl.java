@@ -13,6 +13,6 @@ public class HelloServiceImpl implements HelloService {
         if ("JonKee9".equals(name)) {
             throw new RuntimeException("JonKee9 异常测试");
         }
-        return "hello qingcha";
+        return "hello " + name;
     }
 }

@@ -27,9 +27,6 @@ public class ProxyInvocationHandler implements InvocationHandler {
     private static final Logger logger = LoggerFactory.getLogger(ProxyInvocationHandler.class);
     private final RpcClientHolder holder;
     private final ProtocolSerialize protocolSerialize = ProtocolSerializeManager.getProtocolSerialize();
-    private final static String TO_STRING = "toString";
-    private final static String EQUALS = "equals";
-    private final static String HASH_CODE = "hashCode";
     private final RpcInterceptorChain<RpcProtocol> rpcInterceptorChain;
 
     public ProxyInvocationHandler(RpcClientHolder holder) {
@@ -50,14 +47,8 @@ public class ProxyInvocationHandler implements InvocationHandler {
         RpcClient rpcClient = holder.getRpcClient();
         String methodName = method.getName();
         // 因为代理的是一个接口，没有具体的实现类，所以有一些方法无法处理
-        if (TO_STRING.equals(methodName)) {
-            return holder.getClazz().getName() + "@Proxy";
-        }
-        if (EQUALS.equals(methodName)) {
-            return this.equals(args[0]);
-        }
-        if (HASH_CODE.equals(methodName)) {
-            return this.hashCode();
+        if (Object.class.equals(method.getDeclaringClass())) {
+            return method.invoke(this, args);
         }
         // 懒加载模式，如果没有启动，则现在开始启动
         if (!rpcClient.isStarted()) {

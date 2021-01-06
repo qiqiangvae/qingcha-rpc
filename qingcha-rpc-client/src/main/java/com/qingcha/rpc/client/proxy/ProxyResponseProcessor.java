@@ -22,7 +22,7 @@ public class ProxyResponseProcessor {
         this.holder = holder;
     }
 
-    public void handleResponse(String key, RpcResponseBody rpcResponseBody) {
+    public void handleResponse(String key, RpcResponseBody<?> rpcResponseBody) {
         boolean success = rpcResponseBody.isSuccess();
         String message = rpcResponseBody.getMessage();
         Object bodyBody = rpcResponseBody.getBody();
